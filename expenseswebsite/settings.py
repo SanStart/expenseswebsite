@@ -31,7 +31,11 @@ SECRET_KEY = 'django-insecure-mw64eml22bt_-=n+f+zlvli)cx*3o@h%%p7q!d((3-^b#rb!@r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [*]
+ALLOWED_HOSTS = [
+    'truly-expenses-k6e4.onrender.com',
+    'localhost',
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -82,9 +86,26 @@ WSGI_APPLICATION = 'expenseswebsite.wsgi.application'
 
 
 
-DATABASES = {
-   'default': dj_database_url.config(conn_max_age=600)
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(conn_max_age=600)
     }
+else:
+    # Local fallback for development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DB_NAME', 'incomeexpensesdb'),
+            'USER': os.getenv('DB_USER', 'postgres'),
+            'PASSWORD': os.getenv('DB_PASSWORD', '1234newe'),
+            'HOST': os.getenv('DB_HOST', 'localhost'),
+            'PORT': os.getenv('DB_PORT', '5432'),
+        }
+    }
+
 
 
 # Password validation
